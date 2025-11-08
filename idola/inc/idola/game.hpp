@@ -1,0 +1,31 @@
+#ifndef BEOSEOT_GAME_HPP
+#define BEOSEOT_GAME_HPP
+
+#include "game_config.hpp"
+#include "game_context.hpp"
+#include "game_delta.hpp"
+#include <SDL3/SDL_gpu.h>
+#include <memory>
+
+namespace idola {
+    class game {
+    public:
+        game(game_config game_config, SDL_GPUShaderFormat shaderFormat);
+
+        virtual ~game() = default;
+
+        void run();
+
+    protected:
+        virtual void init() = 0;
+        virtual void fixed_step(const game_delta& delta) = 0;
+        virtual void step(const game_delta& delta) = 0;
+        virtual void draw() = 0;
+
+    protected:
+        game_config m_config;
+        std::unique_ptr<game_context> m_context;
+    };
+}
+
+#endif //BEOSEOT_GAME_HPP
