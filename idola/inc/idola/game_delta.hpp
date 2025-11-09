@@ -5,7 +5,7 @@
 
 namespace idola {
     struct game_delta {
-        std::chrono::duration<double> delta;
+        double seconds;
     };
 }
 

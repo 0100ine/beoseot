@@ -39,14 +39,14 @@ void game::run() {
             accumulator += frame_time;
 
             while (accumulator >= dt) {
-                game_delta fixed_delta{};
+                game_delta fixed_delta{.seconds = dt};
                 fixed_step(fixed_delta);
                 t += dt;
                 accumulator -= dt;
             }
             m_context->handle_events();
 
-            game_delta delta{};
+            game_delta delta{.seconds = frame_time};
             step(delta);
             draw();
         }

@@ -6,6 +6,6 @@
 #include "graphics/rasterizer_state.hpp"
 #include "graphics/resource_uploader.hpp"
 #include "graphics/shader.hpp"
-#include "graphics/vertex_types.hpp"
+#include "graphics/vertex_input_state.hpp"
 
 #endif //IDOLA_GRAPHICS_HPP

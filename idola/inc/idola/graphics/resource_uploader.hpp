@@ -53,7 +53,6 @@ namespace idola {
         void upload_and_wait();
         void release();
 
-
     private:
 
         template<typename T>
@@ -61,13 +60,13 @@ namespace idola {
             const uint32_t length_in_bytes = data.size_bytes();
             check_and_resize(length_in_bytes);
 
-            if (m_write_offset + length_in_bytes >= m_transfer_buffer_size) {
+            if (m_write_offset + length_in_bytes > m_transfer_buffer_size) {
                 SDL_Log("Flushing resource uploader...");
                 flush(false);
             }
-            
+
             uint32_t resource_offset = m_write_offset;
-            SDL_memcpy(static_cast<T*>(m_data_ptr) + resource_offset, data.data(), length_in_bytes);
+            SDL_memcpy(reinterpret_cast<void*>(static_cast<char*>(m_data_ptr) + resource_offset), data.data(), length_in_bytes);
             m_write_offset += length_in_bytes;
             return resource_offset;
         }

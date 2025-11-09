@@ -15,7 +15,7 @@ void beoseot::init() {
 }
 
 void beoseot::fixed_step(const idola::game_delta &delta) {
-    m_title_state->step();
+    m_title_state->step(delta);
 }
 
 void beoseot::step(const idola::game_delta &delta) {

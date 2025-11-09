@@ -1,6 +1,5 @@
 #include "idola/graphics/resource_uploader.hpp"
-
-#include <tinygltf/tiny_gltf.h>
+#include <iostream>
 
 using namespace idola;
 
@@ -63,6 +62,7 @@ void resource_uploader::flush(bool wait) {
     SDL_UnmapGPUTransferBuffer(m_device, m_transfer_buffer);
     auto* command_buffer = SDL_AcquireGPUCommandBuffer(m_device);
     auto* copy_pass = SDL_BeginGPUCopyPass(command_buffer);
+
     for (auto [offset, buffer_region, cycle] : m_buffer_uploads) {
         SDL_GPUTransferBufferLocation location = {
             .transfer_buffer = m_transfer_buffer,

@@ -14,12 +14,13 @@ namespace bst {
         ~title_state() override;
 
         void enter() override;
-        void step() override;
+        void step(const idola::game_delta& delta) override;
         void exit() override;
         void draw(SDL_GPUCommandBuffer* command_buffer, SDL_GPUTexture* swapchain_texture) override;
 
     private:
         unsigned int m_model;
+        float m_time;
         idola::model_loader m_loader;
         SDL_GPUGraphicsPipeline* m_pipeline;
     };

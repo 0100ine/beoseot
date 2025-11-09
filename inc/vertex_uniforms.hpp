@@ -5,7 +5,12 @@
 
 namespace bst {
     struct uniform_view_projection {
-        float* view_proj;
+        float model[16];
+        float view_proj[16];
+    };
+
+    struct uniform_color {
+        float color[4];
     };
 }
 

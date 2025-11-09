@@ -1,5 +1,5 @@
 #include "idola/graphics/model_loader.hpp"
-#include "idola/graphics/vertex_types.hpp"
+#include "idola/graphics/vertex_input_state.hpp"
 #define STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #define TINYGLTF_IMPLEMENTATION
@@ -14,7 +14,7 @@ model_loader::model_loader(SDL_GPUDevice* device) : m_device(device) {
 
 }
 
-unsigned int model_loader::load(resource_uploader& uploader, const std::string &filename) {
+unsigned int model_loader::load(resource_uploader& uploader, const std::string &filename, VERTEX_TYPE vertex_type) {
     tinygltf::TinyGLTF loader;
     tinygltf::Model model;
     std::string err;
@@ -35,8 +35,7 @@ unsigned int model_loader::load(resource_uploader& uploader, const std::string &
 
     std::vector<uint16_t> indices;
     std::vector<unsigned char> positions;
-    std::vector<unsigned char> normals;
-    std::vector<unsigned char> uvs;
+    std::map<VERTEX_ATTRIBUTE, std::vector<unsigned char>> attributes;
     uint16_t index_count {0};
 
     const tinygltf::Scene& scene = model.scenes[model.defaultScene];
@@ -88,24 +87,16 @@ unsigned int model_loader::load(resource_uploader& uploader, const std::string &
 
                 auto subspan = span.subspan(view.byteOffset, accessor.count * size * length);
 
-                if (it->first == "POSITION") {
-                    positions.insert(positions.end(), subspan.begin(), subspan.end());
-                }
-                else if (it->first == "NORMAL") {
-                    normals.insert(normals.end(), subspan.begin(), subspan.end());
-                }
-                else if (it->first == "TEXCOORD_0") {
-                    uvs.insert(uvs.end(), subspan.begin(), subspan.end());
-                }
+                positions.insert(positions.end(), subspan.begin(), subspan.end());
             }
         }
     }
     
     idola::model m{};
-    m.index_buffer = uploader.create_buffer(std::span(indices), SDL_GPU_BUFFERUSAGE_INDEX);
     m.vertex_buffers.emplace("POSITION", uploader.create_buffer(std::span(positions), SDL_GPU_BUFFERUSAGE_VERTEX));
     m.vertex_buffers.emplace("NORMAL", uploader.create_buffer(std::span(normals), SDL_GPU_BUFFERUSAGE_VERTEX));
     m.vertex_buffers.emplace("TEXCOORD_0", uploader.create_buffer(std::span(uvs), SDL_GPU_BUFFERUSAGE_VERTEX));
+    m.index_buffer = uploader.create_buffer(std::span(indices), SDL_GPU_BUFFERUSAGE_INDEX);
     m.index_count = index_count;
     m_models[0] = m;
 
