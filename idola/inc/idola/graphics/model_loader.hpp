@@ -16,15 +16,12 @@ namespace idola {
 
         TEXCOORD_0 = 1 << 3,
         TEXCOORD_1 = 1 << 4,
-        TEXCOORD_2 = 1 << 5,
 
         COLOR_0 = 1 << 6,
         COLOR_1 = 1 << 7,
 
         JOINTS_0 = 1 << 8,
-        JOINTS_1 = 1 << 9,
         WEIGHTS_0 = 1 << 10,
-        WEIGHTS_1 = 1 << 11
     };
 
     inline VERTEX_ATTRIBUTE operator|(VERTEX_ATTRIBUTE a, VERTEX_ATTRIBUTE b)
@@ -46,9 +43,12 @@ namespace idola {
     public:
         explicit model_loader(SDL_GPUDevice* device);
 
-        unsigned int load(resource_uploader& uploader, const std::string& filename, VERTEX_TYPE vertex_type);
+        unsigned int load(resource_uploader& uploader, const std::string& filename, VERTEX_ATTRIBUTE attributes);
         void unload(unsigned int id);
         const model& get(unsigned int id);
+
+    private:
+        static bool has_vertex_attribute(VERTEX_ATTRIBUTE flags, VERTEX_ATTRIBUTE attribute);
 
     private:
         SDL_GPUDevice* m_device;

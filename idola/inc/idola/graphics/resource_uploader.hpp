@@ -1,5 +1,5 @@
-#ifndef BEOSEOT_RESOURCE_UPLOADER_HPP
-#define BEOSEOT_RESOURCE_UPLOADER_HPP
+#ifndef IDOLA_RESOURCE_UPLOADER_HPP
+#define IDOLA_RESOURCE_UPLOADER_HPP
 #include <SDL3/SDL_gpu.h>
 #include <SDL3/SDL_log.h>
 #include <span>
@@ -85,4 +85,4 @@ namespace idola {
     };
 }
 
-#endif //BEOSEOT_RESOURCE_UPLOADER_HPP
+#endif //IDOLA_RESOURCE_UPLOADER_HPP

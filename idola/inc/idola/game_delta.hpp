@@ -1,5 +1,5 @@
-#ifndef BEOSEOT_GAME_DELTA_HPP
-#define BEOSEOT_GAME_DELTA_HPP
+#ifndef IDOLA_GAME_DELTA_HPP
+#define IDOLA_GAME_DELTA_HPP
 
 #include <chrono>
 
@@ -9,4 +9,4 @@ namespace idola {
     };
 }
 
-#endif //BEOSEOT_GAME_DELTA_HPP
+#endif //IDOLA_GAME_DELTA_HPP

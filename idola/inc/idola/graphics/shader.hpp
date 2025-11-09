@@ -1,5 +1,5 @@
-#ifndef BEOSEOT_SHADER_HPP
-#define BEOSEOT_SHADER_HPP
+#ifndef IDOLA_SHADER_HPP
+#define IDOLA_SHADER_HPP
 
 #include <SDL3/SDL_gpu.h>
 #include <string>
@@ -15,4 +15,4 @@ namespace idola::shader {
     SDL_GPUShader* load(SDL_GPUDevice* device, const std::string& filename);
 }
 
-#endif //BEOSEOT_SHADER_HPP
+#endif //IDOLA_SHADER_HPP

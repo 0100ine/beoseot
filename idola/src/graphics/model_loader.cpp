@@ -14,7 +14,7 @@ model_loader::model_loader(SDL_GPUDevice* device) : m_device(device) {
 
 }
 
-unsigned int model_loader::load(resource_uploader& uploader, const std::string &filename, VERTEX_TYPE vertex_type) {
+unsigned int model_loader::load(resource_uploader& uploader, const std::string &filename, VERTEX_ATTRIBUTE flags) {
     tinygltf::TinyGLTF loader;
     tinygltf::Model model;
     std::string err;
@@ -35,7 +35,7 @@ unsigned int model_loader::load(resource_uploader& uploader, const std::string &
 
     std::vector<uint16_t> indices;
     std::vector<unsigned char> positions;
-    std::map<VERTEX_ATTRIBUTE, std::vector<unsigned char>> attributes;
+    std::vector<unsigned char> normals;
     uint16_t index_count {0};
 
     const tinygltf::Scene& scene = model.scenes[model.defaultScene];
@@ -87,15 +87,18 @@ unsigned int model_loader::load(resource_uploader& uploader, const std::string &
 
                 auto subspan = span.subspan(view.byteOffset, accessor.count * size * length);
 
-                positions.insert(positions.end(), subspan.begin(), subspan.end());
+                if (it->first == "POSITION" && has_vertex_attribute(flags, VERTEX_ATTRIBUTE::POSITION)) {
+                    positions.insert(positions.end(), subspan.begin(), subspan.end());
+                }
+                else if (it->first == "NORMAL" && has_vertex_attribute(flags, VERTEX_ATTRIBUTE::NORMAL)) {
+
+                }
             }
         }
     }
     
     idola::model m{};
     m.vertex_buffers.emplace("POSITION", uploader.create_buffer(std::span(positions), SDL_GPU_BUFFERUSAGE_VERTEX));
-    m.vertex_buffers.emplace("NORMAL", uploader.create_buffer(std::span(normals), SDL_GPU_BUFFERUSAGE_VERTEX));
-    m.vertex_buffers.emplace("TEXCOORD_0", uploader.create_buffer(std::span(uvs), SDL_GPU_BUFFERUSAGE_VERTEX));
     m.index_buffer = uploader.create_buffer(std::span(indices), SDL_GPU_BUFFERUSAGE_INDEX);
     m.index_count = index_count;
     m_models[0] = m;
@@ -117,4 +120,8 @@ void model_loader::unload(const unsigned int id) {
 
 const model& model_loader::get(const unsigned int id) {
     return m_models[id];
+}
+
+inline bool model_loader::has_vertex_attribute(VERTEX_ATTRIBUTE flags, VERTEX_ATTRIBUTE attribute) {
+    return (static_cast<int>(flags) & static_cast<int>(attribute)) == static_cast<int>(attribute);
 }

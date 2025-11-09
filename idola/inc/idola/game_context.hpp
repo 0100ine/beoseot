@@ -1,6 +1,6 @@
 
-#ifndef BEOSEOT_GAME_CONTEXT_HPP
-#define BEOSEOT_GAME_CONTEXT_HPP
+#ifndef IDOLA_GAME_CONTEXT_HPP
+#define IDOLA_GAME_CONTEXT_HPP
 
 #include "game_config.hpp"
 #include "graphics/resource_uploader.hpp"
@@ -34,4 +34,4 @@ namespace idola {
     };
 }
 
-#endif //BEOSEOT_GAME_CONTEXT_HPP
+#endif //IDOLA_GAME_CONTEXT_HPP

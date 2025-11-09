@@ -1,5 +1,5 @@
-#ifndef BEOSEOT_GAME_HPP
-#define BEOSEOT_GAME_HPP
+#ifndef IDOLA_GAME_HPP
+#define IDOLA_GAME_HPP
 
 #include "game_config.hpp"
 #include "game_context.hpp"
@@ -28,4 +28,4 @@ namespace idola {
     };
 }
 
-#endif //BEOSEOT_GAME_HPP
+#endif //IDOLA_GAME_HPP

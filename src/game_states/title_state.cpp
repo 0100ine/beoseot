@@ -1,11 +1,11 @@
 #include "game_states/title_state.hpp"
+#include "graphics/vertex_types.hpp"
 #include "vertex_uniforms.hpp"
-#include <cmath>
-#include <idola/graphics/vertex_types.hpp>
 #include <idola/graphics.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
+#include <cmath>
 
 using namespace bst;
 
@@ -13,11 +13,7 @@ title_state::title_state(const std::unique_ptr<idola::game_context>& context): m
     auto uploader = context->get_resource_uploader(8192 * sizeof(float));
 
     m_model = m_loader.load(uploader,
-        "res/meshes/test.glb",
-        idola::VERTEX_ATTRIBUTE::POSITION |
-        idola::VERTEX_ATTRIBUTE::NORMAL |
-        idola::VERTEX_ATTRIBUTE::TEXCOORD_0);
-
+        "res/meshes/test.glb", idola::VERTEX_ATTRIBUTE::POSITION);
     uploader.upload();
     uploader.release();
 
@@ -26,38 +22,6 @@ title_state::title_state(const std::unique_ptr<idola::game_context>& context): m
         .format = context->get_swapchain_format(),
         .blend_state = idola::blend_state::opaque()
     };
-
-    SDL_GPUVertexBufferDescription vertex_buffer_descriptions[3];
-    vertex_buffer_descriptions[0].slot = 0;
-    vertex_buffer_descriptions[0].input_rate = SDL_GPU_VERTEXINPUTRATE_VERTEX;
-    vertex_buffer_descriptions[0].instance_step_rate = 0;
-    vertex_buffer_descriptions[0].pitch = sizeof(float) * 3;
-
-    vertex_buffer_descriptions[1].slot = 1;
-    vertex_buffer_descriptions[1].input_rate = SDL_GPU_VERTEXINPUTRATE_VERTEX;
-    vertex_buffer_descriptions[1].instance_step_rate = 0;
-    vertex_buffer_descriptions[1].pitch = sizeof(float) * 3;
-
-    vertex_buffer_descriptions[2].slot = 2;
-    vertex_buffer_descriptions[2].input_rate = SDL_GPU_VERTEXINPUTRATE_VERTEX;
-    vertex_buffer_descriptions[2].instance_step_rate = 0;
-    vertex_buffer_descriptions[2].pitch = sizeof(float) * 2;
-
-    SDL_GPUVertexAttribute vertex_attributes[3];
-    vertex_attributes[0].buffer_slot = 0;
-    vertex_attributes[0].location = 0;
-    vertex_attributes[0].format = SDL_GPU_VERTEXELEMENTFORMAT_FLOAT3;
-    vertex_attributes[0].offset = 0;
-
-    vertex_attributes[1].buffer_slot = 1;
-    vertex_attributes[1].location = 1;
-    vertex_attributes[1].format = SDL_GPU_VERTEXELEMENTFORMAT_FLOAT3;
-    vertex_attributes[1].offset = 0;
-
-    vertex_attributes[2].buffer_slot = 2;
-    vertex_attributes[2].location = 2;
-    vertex_attributes[2].format = SDL_GPU_VERTEXELEMENTFORMAT_FLOAT2;
-    vertex_attributes[2].offset = 0;
 
     SDL_GPUGraphicsPipelineCreateInfo create_info{};
     create_info.target_info = SDL_GPUGraphicsPipelineTargetInfo {
@@ -72,12 +36,7 @@ title_state::title_state(const std::unique_ptr<idola::game_context>& context): m
         .compare_op = SDL_GPU_COMPAREOP_LESS_OR_EQUAL,
         .enable_depth_test = true
     };
-    create_info.vertex_input_state = {
-        .vertex_buffer_descriptions = vertex_buffer_descriptions,
-        .num_vertex_buffers = 3,
-        .vertex_attributes = vertex_attributes,
-        .num_vertex_attributes = 3
-    };
+    create_info.vertex_input_state = idola::vertex_input_state::create_single_binding<vertex_pos>();
     create_info.primitive_type = SDL_GPU_PRIMITIVETYPE_TRIANGLELIST;
     create_info.vertex_shader = context->load_shader("res/shaders/spv/solid_mesh.vert");
     create_info.fragment_shader = context->load_shader("res/shaders/spv/triangle.frag");
@@ -121,11 +80,9 @@ void title_state::draw(SDL_GPUCommandBuffer* command_buffer, SDL_GPUTexture* swa
 
     // Bind Vertices
     const SDL_GPUBufferBinding vertex_bindings[] {
-        { .buffer = model.vertex_buffers["POSITION"], .offset = 0 },
-        { .buffer = model.vertex_buffers["NORMAL"], .offset = 0 },
-        { .buffer = model.vertex_buffers["TEXCOORD_0"], .offset = 0 },
+        { .buffer = model.vertex_buffers["POSITION"], .offset = 0 }
     };
-    SDL_BindGPUVertexBuffers(render_pass, 0, vertex_bindings, 3);
+    SDL_BindGPUVertexBuffers(render_pass, 0, vertex_bindings, 1);
 
     // Bind Indices
     SDL_GPUBufferBinding index_binding{};
