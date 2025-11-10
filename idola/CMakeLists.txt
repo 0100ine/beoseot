@@ -15,11 +15,15 @@ target_sources(idola
         PRIVATE
         src/game.cpp
         src/game_context.cpp
+
         src/graphics/shader.cpp
         src/graphics/model_loader.cpp
         src/graphics/resource_uploader.cpp
         src/graphics/blend_state.cpp
         src/graphics/rasterizer_state.cpp
+
+        src/inputs/inputs.cpp
+        src/inputs/button.cpp
 )
 
 target_sources(idola

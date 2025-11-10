@@ -6,6 +6,7 @@
 #include "graphics/resource_uploader.hpp"
 #include "graphics/model_loader.hpp"
 #include <SDL3/SDL_gpu.h>
+#include <SDL3/SDL_events.h>
 #include <string>
 
 namespace idola {
@@ -14,7 +15,7 @@ namespace idola {
         game_context(const game_config& game_config, SDL_GPUShaderFormat shader_format);
         ~game_context() = default;
 
-        void handle_events();
+        void handle_events(const SDL_Event& event);
         void shutdown();
 
         [[nodiscard]] bool is_running() const;

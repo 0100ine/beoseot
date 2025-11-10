@@ -11,9 +11,12 @@ using namespace bst;
 
 title_state::title_state(const std::unique_ptr<idola::game_context>& context): m_loader(context->create_model_loader()) {
     auto uploader = context->get_resource_uploader(8192 * sizeof(float));
-
     m_model = m_loader.load(uploader,
-        "res/meshes/test.glb", idola::VERTEX_ATTRIBUTE::POSITION);
+        "res/meshes/test.glb",
+        idola::VERTEX_ATTRIBUTE::POSITION |
+        idola::VERTEX_ATTRIBUTE::NORMAL |
+        idola::VERTEX_ATTRIBUTE::TEXCOORD_0);
+
     uploader.upload();
     uploader.release();
 
@@ -24,6 +27,7 @@ title_state::title_state(const std::unique_ptr<idola::game_context>& context): m
     };
 
     SDL_GPUGraphicsPipelineCreateInfo create_info{};
+
     create_info.target_info = SDL_GPUGraphicsPipelineTargetInfo {
         .color_target_descriptions = color_target_descriptions,
         .num_color_targets = 1

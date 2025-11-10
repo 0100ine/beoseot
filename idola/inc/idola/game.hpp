@@ -4,6 +4,7 @@
 #include "game_config.hpp"
 #include "game_context.hpp"
 #include "game_delta.hpp"
+#include "inputs/inputs.hpp"
 #include <SDL3/SDL_gpu.h>
 #include <memory>
 
@@ -24,7 +25,9 @@ namespace idola {
 
     protected:
         game_config m_config;
+        double m_total_time;
         std::unique_ptr<game_context> m_context;
+        std::unique_ptr<inputs> m_inputs;
     };
 }
 

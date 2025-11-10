@@ -1,4 +1,5 @@
 #include "beoseot.hpp"
+#include <iostream>
 
 using namespace bst;
 
@@ -19,7 +20,21 @@ void beoseot::fixed_step(const idola::game_delta &delta) {
 }
 
 void beoseot::step(const idola::game_delta &delta) {
-
+    auto w_state = m_inputs->get_button(SDL_SCANCODE_W);
+    switch (w_state.state) {
+        case idola::BUTTON_STATE::IDLE:
+            std::cout << "IDLE\n";
+            break;
+        case idola::BUTTON_STATE::RELEASED:
+            std::cout << "RELEASED\n";
+            break;
+        case idola::BUTTON_STATE::PRESSED:
+            std::cout << "PRESSED\n";
+            break;
+        case idola::BUTTON_STATE::HELD:
+            std::cout << "HELD\n";
+            break;
+    }
 }
 
 void beoseot::draw() {

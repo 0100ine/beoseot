@@ -44,13 +44,10 @@ game_context::game_context(const game_config &game_config, SDL_GPUShaderFormat s
     m_is_running = true;
 }
 
-void game_context::handle_events() {
-    SDL_Event event;
-    while (SDL_PollEvent(&event)) {
-        switch (event.type) {
-            case SDL_EVENT_QUIT:
-                m_is_running = false;
-        }
+void game_context::handle_events(const SDL_Event& event) {
+    switch (event.type) {
+        case SDL_EVENT_QUIT:
+            m_is_running = false;
     }
 }
 

@@ -5,7 +5,7 @@
 using namespace idola;
 
 game::game(game_config game_config, SDL_GPUShaderFormat shaderFormat)
-    : m_config(std::move(game_config)), m_context(std::make_unique<game_context>(m_config, shaderFormat))
+    : m_config(std::move(game_config)), m_total_time(0), m_context(std::make_unique<game_context>(m_config, shaderFormat)), m_inputs(std::make_unique<inputs>())
 {
 
 }
@@ -28,7 +28,7 @@ void game::run() {
         while (m_context->is_running()) {
             const Uint64 counter_now = SDL_GetPerformanceCounter();
             const Uint64 counter_delta = counter_now - counter_prev;
-            const double current_time = static_cast<double>(counter_now - counter_base) * seconds_per_count;
+            m_total_time = static_cast<double>(counter_now - counter_base) * seconds_per_count;
 
             double frame_time = static_cast<double>(counter_delta) * seconds_per_count;
             if (frame_time > 0.25) {
@@ -38,16 +38,24 @@ void game::run() {
 
             accumulator += frame_time;
 
+            SDL_Event event;
+            while (SDL_PollEvent(&event)) {
+                m_context->handle_events(event);
+                m_inputs->handle_event(event);
+            }
+
             while (accumulator >= dt) {
                 game_delta fixed_delta{.seconds = dt};
                 fixed_step(fixed_delta);
                 t += dt;
                 accumulator -= dt;
+
+                m_inputs->clear();
             }
-            m_context->handle_events();
 
             game_delta delta{.seconds = frame_time};
             step(delta);
+
             draw();
         }
     }
