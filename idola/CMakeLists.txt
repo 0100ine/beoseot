@@ -24,6 +24,8 @@ target_sources(idola
 
         src/inputs/inputs.cpp
         src/inputs/button.cpp
+        src/inputs/keyboard.cpp
+        src/inputs/keyboard_button.cpp
 )
 
 target_sources(idola

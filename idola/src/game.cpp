@@ -41,16 +41,16 @@ void game::run() {
             SDL_Event event;
             while (SDL_PollEvent(&event)) {
                 m_context->handle_events(event);
-                m_inputs->handle_event(event);
+                m_inputs->handle_events(event);
             }
+
+            m_inputs->update();
 
             while (accumulator >= dt) {
                 game_delta fixed_delta{.seconds = dt};
                 fixed_step(fixed_delta);
                 t += dt;
                 accumulator -= dt;
-
-                m_inputs->clear();
             }
 
             game_delta delta{.seconds = frame_time};

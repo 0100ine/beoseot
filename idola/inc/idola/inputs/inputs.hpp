@@ -1,34 +1,23 @@
 #ifndef IDOLA_INPUTS_HPP
 #define IDOLA_INPUTS_HPP
 
-#include "idola/inputs/button.hpp"
+#include "idola/inputs/keyboard.hpp"
 #include <SDL3/SDL_events.h>
-#include <array>
+#include <memory>
 
 namespace idola {
-    struct input_axis_state {
-        float x;
-        float y;
-    };
-
     class inputs {
     public:
         inputs();
         ~inputs() = default;
 
-        void handle_event(const SDL_Event& event);
-        void consume_inputs();
-        void clear();
+        void handle_events(const SDL_Event& event);
+        void update();
 
-        [[nodiscard]] const button& get_button(SDL_Scancode scancode) const;
-        [[nodiscard]] const button& get_button(SDL_GamepadButton gbutton) const;
+        [[nodiscard]] const std::unique_ptr<keyboard>& get_keyboard() const;
 
     private:
-        static void update_button_state(BUTTON_STATE& state, bool pressed);
-
-    private:
-        std::array<button, SDL_SCANCODE_COUNT> m_keys;
-        std::array<button, SDL_GAMEPAD_BUTTON_COUNT> m_gbuttons;
+        std::unique_ptr<keyboard> m_keyboard;
     };
 }
 
