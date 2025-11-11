@@ -12,8 +12,8 @@ namespace idola {
         ~keyboard() = default;
 
         void update();
-        bool is_any_pressed() const;
-        bool is_key_pressed(SDL_Scancode scancode) const;
+        [[nodiscard]] bool is_any_pressed() const;
+        [[nodiscard]] bool is_key_pressed(SDL_Scancode scancode) const;
 
         const keyboard_button& get_key(SDL_Scancode scancode);
 

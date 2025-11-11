@@ -4,6 +4,7 @@
 #include "game_state.hpp"
 #include <SDL3/SDL_gpu.h>
 #include <idola/game_context.hpp>
+#include <idola/inputs/inputs.hpp>
 #include <idola/graphics/model_loader.hpp>
 #include <memory>
 

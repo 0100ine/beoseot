@@ -31,7 +31,7 @@ bool button::is_held() const {
 }
 
 void button::update() {
-    if (check()) {
+    if (check_pressed()) { // pressed
         if (state == BUTTON_STATE::RELEASED || state == BUTTON_STATE::IDLE) {
             state = BUTTON_STATE::PRESSED;
         }
@@ -39,7 +39,7 @@ void button::update() {
             state = BUTTON_STATE::HELD;
         }
     }
-    else {
+    else { // not pressed
         if (state == BUTTON_STATE::PRESSED || state == BUTTON_STATE::HELD) {
             state = BUTTON_STATE::RELEASED;
         }

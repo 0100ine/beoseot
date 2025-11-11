@@ -16,7 +16,7 @@ namespace idola {
         [[nodiscard]] bool is_held() const;
 
         void update();
-        [[nodiscard]] virtual bool check() const = 0;
+        [[nodiscard]] virtual bool check_pressed() const = 0;
 
         BUTTON_STATE state;
     };

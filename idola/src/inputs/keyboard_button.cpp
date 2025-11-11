@@ -11,6 +11,8 @@ keyboard_button::keyboard_button(keyboard* parent, SDL_Scancode scancode)
 
 }
 
-bool keyboard_button::check() const {
+bool keyboard_button::check_pressed() const {
+    if (scancode == SDL_SCANCODE_UNKNOWN) return false;
+
     return m_parent->is_key_pressed(scancode);
 }

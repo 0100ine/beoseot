@@ -20,11 +20,7 @@ void beoseot::fixed_step(const idola::game_delta &delta) {
 }
 
 void beoseot::step(const idola::game_delta &delta) {
-    auto& keyboard = m_inputs->get_keyboard();
-    auto& key = keyboard->get_key(SDL_SCANCODE_W);
-    if (key.is_down()) {
-        std::cout << "!!" << std::endl;
-    }
+
 }
 
 void beoseot::draw() {
