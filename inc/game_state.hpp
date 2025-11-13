@@ -2,10 +2,11 @@
 #define BEOSEOT_GAME_STATE_HPP
 
 #include <SDL3/SDL_gpu.h>
-
 #include "idola/game_delta.hpp"
 
 namespace bst {
+    class beoseot;
+
     class game_state {
     public:
         virtual ~game_state() = default;

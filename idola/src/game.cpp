@@ -10,6 +10,14 @@ game::game(game_config game_config, SDL_GPUShaderFormat shaderFormat)
 
 }
 
+const std::unique_ptr<game_context> &game::get_context() const {
+    return m_context;
+}
+
+const std::unique_ptr<inputs> &game::get_inputs() const {
+    return m_inputs;
+}
+
 void game::run() {
 
     if (m_context->is_running()) {

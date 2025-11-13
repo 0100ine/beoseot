@@ -16,6 +16,8 @@ namespace idola {
         virtual ~game() = default;
 
         void run();
+        const std::unique_ptr<game_context>& get_context() const;
+        const std::unique_ptr<inputs>& get_inputs() const;
 
     protected:
         virtual void init() = 0;

@@ -15,6 +15,11 @@ void inputs::update() {
     m_keyboard->update();
 }
 
+const keyboard_input &inputs::get_key(SDL_Scancode scancode) const {
+    return m_keyboard->get_key(scancode);
+}
+
+
 const std::unique_ptr<keyboard>& inputs::get_keyboard() const {
     return m_keyboard;
 }

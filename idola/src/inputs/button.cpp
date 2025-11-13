@@ -49,3 +49,6 @@ void button::update() {
     }
 }
 
+bool button::check_pressed() const {
+    return false;
+}

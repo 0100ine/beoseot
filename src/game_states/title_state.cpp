@@ -1,6 +1,8 @@
 #include "game_states/title_state.hpp"
 #include "graphics/vertex_types.hpp"
 #include "vertex_uniforms.hpp"
+#include "beoseot.hpp"
+#include <idola/game_context.hpp>
 #include <idola/graphics.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -9,13 +11,20 @@
 
 using namespace bst;
 
-title_state::title_state(const std::unique_ptr<idola::game_context>& context): m_loader(context->create_model_loader()) {
+title_state::title_state(const beoseot& game)
+    :
+    m_game(game),
+    m_time(0.0f),
+    m_loader(game.get_context()->create_model_loader())
+{
+    auto &context = game.get_context();
+
     auto uploader = context->get_resource_uploader(8192 * sizeof(float));
     m_model = m_loader.load(uploader,
-        "res/meshes/test.glb",
-        idola::VERTEX_ATTRIBUTE::POSITION |
-        idola::VERTEX_ATTRIBUTE::NORMAL |
-        idola::VERTEX_ATTRIBUTE::TEXCOORD_0);
+                            "res/meshes/test.glb",
+                            idola::VERTEX_ATTRIBUTE::POSITION |
+                            idola::VERTEX_ATTRIBUTE::NORMAL |
+                            idola::VERTEX_ATTRIBUTE::TEXCOORD_0);
 
     uploader.upload();
     uploader.release();
@@ -28,22 +37,22 @@ title_state::title_state(const std::unique_ptr<idola::game_context>& context): m
 
     SDL_GPUGraphicsPipelineCreateInfo create_info{};
 
-    create_info.target_info = SDL_GPUGraphicsPipelineTargetInfo {
+    create_info.target_info = SDL_GPUGraphicsPipelineTargetInfo{
         .color_target_descriptions = color_target_descriptions,
         .num_color_targets = 1
     };
-    create_info.multisample_state = SDL_GPUMultisampleState {
+    create_info.multisample_state = SDL_GPUMultisampleState{
         .sample_count = SDL_GPU_SAMPLECOUNT_1
     };
     create_info.rasterizer_state = idola::rasterizer_state::ccw_cull_back();
-    create_info.depth_stencil_state = SDL_GPUDepthStencilState {
+    create_info.depth_stencil_state = SDL_GPUDepthStencilState{
         .compare_op = SDL_GPU_COMPAREOP_LESS_OR_EQUAL,
         .enable_depth_test = true
     };
-    create_info.vertex_input_state = idola::vertex_input_state::create_single_binding<vertex_pos>();
+    create_info.vertex_input_state = idola::vertex_input_state::create_single_binding<vertex_pos_nrm_tex>();
     create_info.primitive_type = SDL_GPU_PRIMITIVETYPE_TRIANGLELIST;
     create_info.vertex_shader = context->load_shader("res/shaders/spv/solid_mesh.vert");
-    create_info.fragment_shader = context->load_shader("res/shaders/spv/triangle.frag");
+    create_info.fragment_shader = context->load_shader("res/shaders/spv/solid_color.frag");
 
     m_pipeline = context->create_pipeline(create_info);
 }
@@ -84,9 +93,11 @@ void title_state::draw(SDL_GPUCommandBuffer* command_buffer, SDL_GPUTexture* swa
 
     // Bind Vertices
     const SDL_GPUBufferBinding vertex_bindings[] {
-        { .buffer = model.vertex_buffers["POSITION"], .offset = 0 }
+        { .buffer = model.vertex_buffers["POSITION"], .offset = 0 },
+        { .buffer = model.vertex_buffers["NORMAL"], .offset = 0 },
+        { .buffer = model.vertex_buffers["TEXCOORD_0"], .offset = 0 }
     };
-    SDL_BindGPUVertexBuffers(render_pass, 0, vertex_bindings, 1);
+    SDL_BindGPUVertexBuffers(render_pass, 0, vertex_bindings, 3);
 
     // Bind Indices
     SDL_GPUBufferBinding index_binding{};

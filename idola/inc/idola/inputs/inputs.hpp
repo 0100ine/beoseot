@@ -14,8 +14,10 @@ namespace idola {
         void handle_events(const SDL_Event& event);
         void update();
 
-        [[nodiscard]] const std::unique_ptr<keyboard>& get_keyboard() const;
+        const keyboard_input& get_key(SDL_Scancode scancode) const;
 
+        [[nodiscard]] const std::unique_ptr<keyboard>& get_keyboard() const;
+        
     private:
         std::unique_ptr<keyboard> m_keyboard;
     };

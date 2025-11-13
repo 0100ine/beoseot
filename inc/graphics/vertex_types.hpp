@@ -89,19 +89,19 @@ namespace bst {
             },
             { // Normal
                 .location = 1,
-                .buffer_slot = 0,
+                .buffer_slot = 1,
                 .format = SDL_GPU_VERTEXELEMENTFORMAT_FLOAT3,
                 .offset = 0
             },
             { // TexCoord
                 .location = 2,
-                .buffer_slot = 0,
+                .buffer_slot = 2,
                 .format = SDL_GPU_VERTEXELEMENTFORMAT_FLOAT2,
                 .offset = 0
             }
         };
 
-        static constexpr std::array<SDL_GPUVertexBufferDescription, 2> descriptions = {
+        static constexpr std::array<SDL_GPUVertexBufferDescription, 3> descriptions = {
             SDL_GPUVertexBufferDescription {
                 .slot = 0,
                 .pitch = sizeof(float) * 3,
@@ -109,8 +109,14 @@ namespace bst {
                 .instance_step_rate = 0
             },
             {
-                .slot = 0,
+                .slot = 1,
                 .pitch = sizeof(float) * 3,
+                .input_rate = SDL_GPU_VERTEXINPUTRATE_VERTEX,
+                .instance_step_rate = 0
+            },
+            {
+                .slot = 2,
+                .pitch = sizeof(float) * 2,
                 .input_rate = SDL_GPU_VERTEXINPUTRATE_VERTEX,
                 .instance_step_rate = 0
             }

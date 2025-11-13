@@ -36,6 +36,7 @@ unsigned int model_loader::load(resource_uploader& uploader, const std::string &
     std::vector<uint16_t> indices;
     std::vector<unsigned char> positions;
     std::vector<unsigned char> normals;
+    std::vector<unsigned char> uvs;
     uint16_t index_count {0};
 
     const tinygltf::Scene& scene = model.scenes[model.defaultScene];
@@ -91,7 +92,10 @@ unsigned int model_loader::load(resource_uploader& uploader, const std::string &
                     positions.insert(positions.end(), subspan.begin(), subspan.end());
                 }
                 else if (it->first == "NORMAL" && has_vertex_attribute(flags, VERTEX_ATTRIBUTE::NORMAL)) {
-
+                    normals.insert(normals.end(), subspan.begin(), subspan.end());
+                }
+                else if (it->first == "TEXCOORD_0" && has_vertex_attribute(flags, VERTEX_ATTRIBUTE::NORMAL)) {
+                    uvs.insert(uvs.end(), subspan.begin(), subspan.end());
                 }
             }
         }
@@ -99,6 +103,8 @@ unsigned int model_loader::load(resource_uploader& uploader, const std::string &
     
     idola::model m{};
     m.vertex_buffers.emplace("POSITION", uploader.create_buffer(std::span(positions), SDL_GPU_BUFFERUSAGE_VERTEX));
+    m.vertex_buffers.emplace("NORMAL", uploader.create_buffer(std::span(normals), SDL_GPU_BUFFERUSAGE_VERTEX));
+    m.vertex_buffers.emplace("TEXCOORD_0", uploader.create_buffer(std::span(uvs), SDL_GPU_BUFFERUSAGE_VERTEX));
     m.index_buffer = uploader.create_buffer(std::span(indices), SDL_GPU_BUFFERUSAGE_INDEX);
     m.index_count = index_count;
     m_models[0] = m;
